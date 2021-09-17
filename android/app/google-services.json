@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1015881852501",
+    "project_id": "familyrecipies-4852a",
+    "storage_bucket": "familyrecipies-4852a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015881852501:android:3c6913fee443651aeb16dc",
+        "android_client_info": {
+          "package_name": "com.familyrecipies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015881852501-bhhc2d666ocblitue7i2ft4bde44bl34.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXiiOsx4yTLIrB4bWNn4zcoVbsatrxpQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015881852501-bhhc2d666ocblitue7i2ft4bde44bl34.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
