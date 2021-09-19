@@ -4700,6 +4700,7 @@ __metadata:
     react-native-keyboard-aware-scroll-view: ^0.9.4
     react-native-safe-area-context: ^3.3.2
     react-native-screens: ^3.6.0
+    react-native-toast-message: ^1.6.0
     react-native-vector-icons: ^8.1.0
     react-test-renderer: 17.0.2
   languageName: unknown
@@ -8517,6 +8518,15 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: f82625c851663237f04afe5e6f1bb6c0355e94148288bf1f37bb612bdbfc1638363c8908fb021cb080db4759b81fc41744b7d571f781117341bc9cbea1ea2156
+  languageName: node
+  linkType: hard
+
+"react-native-toast-message@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "react-native-toast-message@npm:1.6.0"
+  dependencies:
+    prop-types: ^15.7.2
+  checksum: 5c6db2a9b384f6c1a4f1fe41009fa223f608ec5208f47b927b6e6410325a0534aa55e37824e5aaff890e2be5ce433b6ad932694739db6acf3c43ee94ff8f750a
   languageName: node
   linkType: hard
 

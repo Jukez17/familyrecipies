@@ -1,32 +1,25 @@
 import React from 'react';
  import {
-   SafeAreaView,
-   ScrollView,
-   StatusBar,
    StyleSheet,
    Text,
-   useColorScheme,
    View,
  } from 'react-native';
  
- import {
-   Colors,
-   DebugInstructions,
-   Header,
-   LearnMoreLinks,
-   ReloadInstructions,
- } from 'react-native/Libraries/NewAppScreen';
- 
- 
  const HomeScreen = () => {
+   const { container } = styles
    return (
-     <SafeAreaView>
+     <View style={container}>
        <Text>Hi</Text>
-     </SafeAreaView>
+     </View>
    );
  };
  
  const styles = StyleSheet.create({
+   container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center'
+   },
    sectionContainer: {
      marginTop: 32,
      paddingHorizontal: 24,
