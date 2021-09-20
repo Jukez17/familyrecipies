@@ -9,23 +9,55 @@ const RegisterScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const usersRef = firebase.firestore().collection('users');
+  const registerSuccToast = () => {
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: 'Registration succesfull',
+      text2: 'Directing you to home screen now',
+    });
+  };
   const passErrorToast = () => {
     Toast.show({
       type: 'error',
       position: 'bottom',
       text1: 'Passwords not matching',
-      text2: 'Try checking your passwords'
-    })
-  }
+      text2: 'Try checking your passwords',
+    });
+  };
   const onLoginPress = () => {
     navigation.navigate('Login');
   };
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      passErrorToast()
-      return
+      passErrorToast();
+      return;
     }
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(response => {
+        console.log('res', response);
+        registerSuccToast();
+        const uid = response.user.uid;
+        const data = {
+          id: uid,
+          email,
+        };
+        usersRef
+          .doc(uid)
+          .set(data)
+          .catch(error => {
+            alert(error); 
+          });
+      })
+      .catch(error => {
+        alert(error);
+      });
+    navigation.navigate('Login');
   };
   const {
     container,
@@ -42,7 +74,7 @@ const RegisterScreen = ({navigation}) => {
         style={{flex: 1, width: '100%'}}
         keyboardShouldPersistTaps="always">
         <TextInput
-          style={styles.input}
+          style={input}
           placeholder="E-mail"
           placeholderTextColor="#aaaaaa"
           onChangeText={text => setEmail(text)}
@@ -51,7 +83,7 @@ const RegisterScreen = ({navigation}) => {
           autoCapitalize="none"
         />
         <TextInput
-          style={styles.input}
+          style={input}
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Password"
@@ -61,7 +93,7 @@ const RegisterScreen = ({navigation}) => {
           autoCapitalize="none"
         />
         <TextInput
-          style={styles.input}
+          style={input}
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Confirm Password"
@@ -71,7 +103,7 @@ const RegisterScreen = ({navigation}) => {
           autoCapitalize="none"
         />
         <TouchableOpacity
-          style={styles.button}
+          style={button}
           onPress={() => onRegisterPress()}>
           <Text style={buttonTitle}>Create account</Text>
         </TouchableOpacity>
