@@ -1,8 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
-export default StyleSheet.create({
+const width = Dimensions.get('screen').width
+
+const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
         alignItems: 'center'
     },
     title: {
@@ -16,15 +19,7 @@ export default StyleSheet.create({
         margin: 30
     },
     input: {
-        height: 48,
-        borderRadius: 5,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        marginTop: 10,
-        marginBottom: 10,
-        marginLeft: 30,
-        marginRight: 30,
-        paddingLeft: 16
+        width: width / 1.2,
     },
     button: {
         backgroundColor: '#788eec',
@@ -56,3 +51,5 @@ export default StyleSheet.create({
         fontSize: 16
     }
 })
+
+export default styles

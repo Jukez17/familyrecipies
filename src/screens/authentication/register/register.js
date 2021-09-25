@@ -1,64 +1,51 @@
-import React, {useState} from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import Toast from 'react-native-toast-message';
-import {firebase} from '../../../firebase/config';
-import styles from './styles';
+import React, { useState } from "react"
+import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { Input } from "react-native-elements"
+import Ionicons from "react-native-vector-icons/Ionicons"
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import { firebase } from "../../../firebase/config"
+// import toasts
+import {
+  registerSuccToast,
+  passErrorToast,
+  userErrorToast,
+} from "../../../components/toasts/index"
+// colors
+import colors from "../../../styles/colors"
+import styles from "./styles"
 
-const RegisterScreen = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const usersRef = firebase.firestore().collection('users');
-  const registerSuccToast = () => {
-    Toast.show({
-      type: 'success',
-      position: 'bottom',
-      text1: 'Registration succesfull',
-      text2: 'Directing you to home screen now',
-    });
-  };
-  const passErrorToast = () => {
-    Toast.show({
-      type: 'error',
-      position: 'bottom',
-      text1: 'Passwords not matching',
-      text2: 'Try checking your passwords',
-    });
-  };
+const RegisterScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [showPass, setShowPass] = useState(false)
+  const [showConfirmPass, setShowConfirmPass] = useState(false)
   const onLoginPress = () => {
-    navigation.navigate('Login');
-  };
-
+    navigation.navigate("Login")
+  }
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      passErrorToast();
-      return;
+      passErrorToast()
+      return
     }
-
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        console.log('res', response);
-        registerSuccToast();
-        const uid = response.user.uid;
-        const data = {
-          id: uid,
-          email,
-        };
-        usersRef
-          .doc(uid)
-          .set(data)
-          .catch(error => {
-            alert(error); 
-          });
+      .then((response) => {
+        registerSuccToast()
+        const uid = firebase.auth().currentUser.uid
+        firebase
+          .database()
+          .ref(`Users/${uid}`)
+          .set({
+            email: email,
+          })
+          .then(() => navigation.navigate("Login"))
+          .catch((error) => {
+            userErrorToast()
+          })
       })
-      .catch(error => {
-        alert(error);
-      });
-    navigation.navigate('Login');
-  };
+  }
   const {
     container,
     input,
@@ -67,27 +54,53 @@ const RegisterScreen = ({navigation}) => {
     footerView,
     footerText,
     footerLink,
-  } = styles;
+  } = styles
   return (
     <View style={container}>
       <KeyboardAwareScrollView
-        style={{flex: 1, width: '100%'}}
+        style={{ flex: 1, width: "100%" }}
         keyboardShouldPersistTaps="always">
-        <TextInput
+        {/*         <TextInput
           style={input}
           placeholder="E-mail"
           placeholderTextColor="#aaaaaa"
-          onChangeText={text => setEmail(text)}
+          onChangeText={(text) => setEmail(text)}
           value={email}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
+        /> */}
+        <Input
+          inputContainerStyle={input}
+          placeholder="E-mail"
+          placeholderTextColor={colors.grey}
+          leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
+          onChangeText={(text) => setEmail(text)}
+          value={email}
         />
-        <TextInput
+        <Input
+          inputContainerStyle={input}
+          placeholder="Password"
+          leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
+          rightIcon={
+              <Ionicons onPress={() => setShowPass(showPass ? false : true)} name={showPass === false ? "md-eye-off" : "md-eye"} size={24} color="black" />
+          }
+          onChangeText={(text) => setPassword(text)}
+          value={password}
+        />
+        <Input
+          inputContainerStyle={input}
+          placeholder="Confirm Password"
+          leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
+          rightIcon={<Ionicons onPress={() => setShowConfirmPass(showConfirmPass ? false : true)} name={showConfirmPass === false ? "md-eye-off" : "md-eye"} size={24} color="black" />}
+          onChangeText={(text) => setConfirmPassword(text)}
+          value={confirmPassword}
+        />
+        {/*         <TextInput
           style={input}
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Password"
-          onChangeText={text => setPassword(text)}
+          onChangeText={(text) => setPassword(text)}
           value={password}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
@@ -97,19 +110,17 @@ const RegisterScreen = ({navigation}) => {
           placeholderTextColor="#aaaaaa"
           secureTextEntry
           placeholder="Confirm Password"
-          onChangeText={text => setConfirmPassword(text)}
+          onChangeText={(text) => setConfirmPassword(text)}
           value={confirmPassword}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
-        />
-        <TouchableOpacity
-          style={button}
-          onPress={() => onRegisterPress()}>
+        /> */}
+        <TouchableOpacity style={button} onPress={() => onRegisterPress()}>
           <Text style={buttonTitle}>Create account</Text>
         </TouchableOpacity>
         <View style={footerView}>
           <Text style={footerText}>
-            Already got an account?{' '}
+            Already got an account?{" "}
             <Text onPress={onLoginPress} style={footerLink}>
               Log in
             </Text>
@@ -117,7 +128,7 @@ const RegisterScreen = ({navigation}) => {
         </View>
       </KeyboardAwareScrollView>
     </View>
-  );
-};
+  )
+}
 
-export default RegisterScreen;
+export default RegisterScreen
