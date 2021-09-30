@@ -4,6 +4,8 @@ import React from 'react';
    Text,
    View,
  } from 'react-native';
+ // colors
+ import colors from '../../styles/colors'
  
  const HomeScreen = () => {
    const { container } = styles
@@ -17,6 +19,7 @@ import React from 'react';
  const styles = StyleSheet.create({
    container: {
     flex: 1,
+    backgroundColor: colors.grey,
     justifyContent: 'center',
     alignContent: 'center'
    },

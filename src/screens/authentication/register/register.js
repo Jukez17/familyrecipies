@@ -1,5 +1,9 @@
 import React, { useState } from "react"
-import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native"
+import {
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 import { Input } from "react-native-elements"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
@@ -54,11 +58,12 @@ const RegisterScreen = ({ navigation }) => {
     footerView,
     footerText,
     footerLink,
+    inputGroup
   } = styles
   return (
     <View style={container}>
       <KeyboardAwareScrollView
-        style={{ flex: 1, width: "100%" }}
+        style={{ flex: 1, width: "100%", marginTop: 20 }}
         keyboardShouldPersistTaps="always">
         {/*         <TextInput
           style={input}
@@ -69,32 +74,66 @@ const RegisterScreen = ({ navigation }) => {
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         /> */}
-        <Input
-          inputContainerStyle={input}
-          placeholder="E-mail"
-          placeholderTextColor={colors.grey}
-          leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-        />
-        <Input
-          inputContainerStyle={input}
-          placeholder="Password"
-          leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
-          rightIcon={
-              <Ionicons onPress={() => setShowPass(showPass ? false : true)} name={showPass === false ? "md-eye-off" : "md-eye"} size={24} color="black" />
-          }
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-        />
-        <Input
-          inputContainerStyle={input}
-          placeholder="Confirm Password"
-          leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
-          rightIcon={<Ionicons onPress={() => setShowConfirmPass(showConfirmPass ? false : true)} name={showConfirmPass === false ? "md-eye-off" : "md-eye"} size={24} color="black" />}
-          onChangeText={(text) => setConfirmPassword(text)}
-          value={confirmPassword}
-        />
+        <View style={inputGroup}>
+          <Input
+            inputContainerStyle={input}
+            placeholder="E-mail"
+            placeholderTextColor={colors.grey}
+            leftIcon={<Ionicons name="md-mail" size={24} color="black" />}
+            onChangeText={(text) => setEmail(text)}
+            value={email}
+          />
+          <Input
+            inputContainerStyle={input}
+            placeholder="Password"
+            leftIcon={
+              <Ionicons name="ios-lock-closed" size={24} color="black" />
+            }
+            rightIcon={
+              <Ionicons
+                onPress={() => setShowPass(showPass ? false : true)}
+                name={showPass === false ? "md-eye-off" : "md-eye"}
+                size={24}
+                color="black"
+              />
+            }
+            secureTextEntry={showPass ? false : true}
+            onChangeText={(text) => setPassword(text)}
+            value={password}
+          />
+          <Input
+            inputContainerStyle={input}
+            placeholder="Confirm Password"
+            leftIcon={
+              <Ionicons name="ios-lock-closed" size={24} color="black" />
+            }
+            rightIcon={
+              <Ionicons
+                onPress={() =>
+                  setShowConfirmPass(showConfirmPass ? false : true)
+                }
+                name={showConfirmPass === false ? "md-eye-off" : "md-eye"}
+                size={24}
+                color="black"
+              />
+            }
+            secureTextEntry={showConfirmPass ? false : true}
+            onChangeText={(text) => setConfirmPassword(text)}
+            value={confirmPassword}
+          />
+          <TouchableOpacity style={button} onPress={() => onRegisterPress()}>
+            <Text style={buttonTitle}>Create account</Text>
+          </TouchableOpacity>
+          <View style={footerView}>
+            <Text style={footerText}>
+              Already got an account?{" "}
+              <Text onPress={onLoginPress} style={footerLink}>
+                Log in
+              </Text>
+            </Text>
+          </View>
+        </View>
+
         {/*         <TextInput
           style={input}
           placeholderTextColor="#aaaaaa"
@@ -115,17 +154,6 @@ const RegisterScreen = ({ navigation }) => {
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         /> */}
-        <TouchableOpacity style={button} onPress={() => onRegisterPress()}>
-          <Text style={buttonTitle}>Create account</Text>
-        </TouchableOpacity>
-        <View style={footerView}>
-          <Text style={footerText}>
-            Already got an account?{" "}
-            <Text onPress={onLoginPress} style={footerLink}>
-              Log in
-            </Text>
-          </Text>
-        </View>
       </KeyboardAwareScrollView>
     </View>
   )

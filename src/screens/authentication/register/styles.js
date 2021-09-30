@@ -20,6 +20,9 @@ const styles = StyleSheet.create({
     },
     input: {
         width: width / 1.2,
+        marginLeft: 25,
+        alignItems: "center",
+        justifyContent: 'center'
     },
     button: {
         backgroundColor: '#788eec',

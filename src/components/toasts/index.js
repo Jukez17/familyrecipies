@@ -1,5 +1,14 @@
 import Toast from "react-native-toast-message"
 
+export const loginSuccToast = () => {
+  Toast.show({
+    type: "success",
+    position: "bottom",
+    text1: "Login succesfull",
+    text2: "Directing you to home screen now",
+  })
+}
+
 export const registerSuccToast = () => {
     Toast.show({
       type: "success",
