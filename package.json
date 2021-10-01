@@ -11,19 +11,25 @@
     "android-build-apk": "cd android && gradlew assembleRelease && cd .."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.8",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
+    "@reduxjs/toolkit": "^1.6.1",
     "base-64": "^1.0.0",
     "firebase": "7.24.0",
     "react": "17.0.2",
     "react-native": "0.65.1",
+    "react-native-device-info": "^8.3.3",
     "react-native-elements": "^3.4.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.4",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.7.2",
     "react-native-toast-message": "^1.6.0",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-vector-icons": "^8.1.0",
+    "react-redux": "^7.2.5",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",

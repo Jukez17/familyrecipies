@@ -1,4 +1,6 @@
+import { bindActionCreators } from "@reduxjs/toolkit"
 import React, { useEffect, useState } from "react"
+import { connect } from "react-redux"
 import { decode, encode } from "base-64"
 if (!global.btoa) {
   global.btoa = encode
@@ -52,18 +54,16 @@ const BottomTabs = () => {
 
 const Root = createNativeStackNavigator()
 
-const Navigation = () => {
-  //const [loading, setLoading] = useState(true)
-  //const [user, setUser] = useState(null)
+const Navigation = (props) => {
   return (
     <NavigationContainer>
-      <Root.Navigator>
+      <Root.Navigator initialRouteName={props.signedIn === false ? "Login" : "Main"}>
         <Root.Screen
           name="Login"
           component={LoginScreen}
           options={{ headerShown: false }}
         />
-        <Root.Screen name="Register" component={RegisterScreen} />
+        <Root.Screen name="Register" component={RegisterScreen} /> 
         <Root.Screen
           name="Main"
           component={BottomTabs}
@@ -76,4 +76,8 @@ const Navigation = () => {
   )
 }
 
-export default Navigation
+const mapStateToProps = (state) => ({
+  signedIn: state.authReducer.signedIn,
+})
+
+export default connect(mapStateToProps)(Navigation)

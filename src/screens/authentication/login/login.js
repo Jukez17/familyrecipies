@@ -1,7 +1,12 @@
+import { bindActionCreators } from "@reduxjs/toolkit"
 import React, { useState } from "react"
 import { Text, TextInput, TouchableOpacity, View } from "react-native"
+import { useNavigation } from "@react-navigation/native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { firebase } from "../../../firebase/config"
+import { connect } from "react-redux"
+// actions
+import * as authenticationAction from "../../../actions/AuthActions"
 // import toasts
 import {
   loginSuccToast,
@@ -10,7 +15,8 @@ import {
 } from "../../../components/toasts/index"
 import styles from "./styles"
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = (props) => {
+  const navigation = useNavigation()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
@@ -30,6 +36,9 @@ const LoginScreen = ({ navigation }) => {
         loginSuccToast()
       })
       .then(() => navigation.navigate("Main"))
+      .then(() => {
+        props.authenticationActions.authenticationAction(true)
+      })
       .catch((error) => {
         userErrorToast()
       })
@@ -83,4 +92,11 @@ const LoginScreen = ({ navigation }) => {
   )
 }
 
-export default LoginScreen
+const mapStateToProps = (state) => ({
+  signedIn: state.authReducer.signedIn,
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  authenticationActions: bindActionCreators(authenticationAction, dispatch),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)
