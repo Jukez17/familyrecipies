@@ -1,6 +1,4 @@
-import { bindActionCreators } from "@reduxjs/toolkit"
-import React, { useEffect, useState } from "react"
-import { connect } from "react-redux"
+import React, { useEffect, useState, useContext } from "react"
 import { decode, encode } from "base-64"
 if (!global.btoa) {
   global.btoa = encode
@@ -8,76 +6,41 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode
 }
-import Ionicons from "react-native-vector-icons/Ionicons"
-import { NavigationContainer } from "@react-navigation/native"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { firebase } from "../firebase/config"
+import { AuthContext } from "./authProvider"
 // screens
-import HomeScreen from "../screens/home"
-import ProfileScreen from "../screens/profile"
-import AddRecipeScreen from "../screens/recepies/addRecepies"
-import LoginScreen from "../screens/authentication/login/login"
-import RegisterScreen from "../screens/authentication/register/register"
+import AuthStack from "./authStack"
+import HomeStack from "./homeStack"
+// components
+import Loading from "../components/loading"
 // colors
-import colors from '../styles/colors'
-
-const Tab = createBottomTabNavigator()
-
-const BottomTabs = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName
-
-          if (route.name === "Home") {
-            iconName = focused ? "md-home" : "md-home-outline"
-          } else if (route.name === "Add recipe") {
-            iconName = focused ? "md-book" : "md-book-outline"
-          } else if (route.name === "Profile") {
-            iconName = focused ? "md-person" : "md-person-outline"
-          }
-
-          // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />
-        },
-        tabBarActiveTintColor: colors.blue,
-        tabBarInactiveTintColor: colors.black,
-        headerTitleAlign: "center"
-      })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Add recipe" component={AddRecipeScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
-  )
-}
-
-const Root = createNativeStackNavigator()
+import colors from "../styles/colors"
 
 const Navigation = (props) => {
+  const { user, setUser } = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
+  const [initializing, setInitializing] = useState(true)
+
+  const onAuthStateChanged = (user) => {
+    setUser(user)
+    if (initializing) setInitializing(false)
+    setLoading(false)
+  }
+  
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged)
+    return subscriber
+  }, [])
+
+  if (loading) {
+    return <Loading />
+  }
+
   return (
-    <NavigationContainer>
-      <Root.Navigator initialRouteName={props.signedIn === false ? "Login" : "Main"}>
-        <Root.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Root.Screen name="Register" component={RegisterScreen} /> 
-        <Root.Screen
-          name="Main"
-          component={BottomTabs}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Root.Navigator>
-    </NavigationContainer>
+    <>
+      {user ? <HomeStack /> : <AuthStack />}
+    </>
   )
 }
 
-const mapStateToProps = (state) => ({
-  signedIn: state.authReducer.signedIn,
-})
-
-export default connect(mapStateToProps)(Navigation)
+export default Navigation

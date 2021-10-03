@@ -1,13 +1,10 @@
-import React, { useState } from "react"
-import {
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import React, { useContext, useState } from "react"
+import { Text, TouchableOpacity, View } from "react-native"
 import { Input } from "react-native-elements"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 import { firebase } from "../../../firebase/config"
+import { AuthContext } from "../../../navigation/authProvider"
 // import toasts
 import {
   registerSuccToast,
@@ -24,6 +21,7 @@ const RegisterScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPass, setShowPass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
+  const { register } = useContext(AuthContext)
   const onLoginPress = () => {
     navigation.navigate("Login")
   }
@@ -32,23 +30,8 @@ const RegisterScreen = ({ navigation }) => {
       passErrorToast()
       return
     }
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((response) => {
-        registerSuccToast()
-        const uid = firebase.auth().currentUser.uid
-        firebase
-          .database()
-          .ref(`Users/${uid}`)
-          .set({
-            email: email,
-          })
-          .then(() => navigation.navigate("Login"))
-          .catch((error) => {
-            userErrorToast()
-          })
-      })
+
+    register(email, password)
   }
   const {
     container,
@@ -58,22 +41,13 @@ const RegisterScreen = ({ navigation }) => {
     footerView,
     footerText,
     footerLink,
-    inputGroup
+    inputGroup,
   } = styles
   return (
     <View style={container}>
       <KeyboardAwareScrollView
         style={{ flex: 1, width: "100%", marginTop: 20 }}
         keyboardShouldPersistTaps="always">
-        {/*         <TextInput
-          style={input}
-          placeholder="E-mail"
-          placeholderTextColor="#aaaaaa"
-          onChangeText={(text) => setEmail(text)}
-          value={email}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        /> */}
         <View style={inputGroup}>
           <Input
             inputContainerStyle={input}
@@ -133,27 +107,6 @@ const RegisterScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-
-        {/*         <TextInput
-          style={input}
-          placeholderTextColor="#aaaaaa"
-          secureTextEntry
-          placeholder="Password"
-          onChangeText={(text) => setPassword(text)}
-          value={password}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={input}
-          placeholderTextColor="#aaaaaa"
-          secureTextEntry
-          placeholder="Confirm Password"
-          onChangeText={(text) => setConfirmPassword(text)}
-          value={confirmPassword}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        /> */}
       </KeyboardAwareScrollView>
     </View>
   )

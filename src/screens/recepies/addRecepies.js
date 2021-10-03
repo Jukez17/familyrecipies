@@ -32,6 +32,11 @@ const AddRecipeScreen = () => {
     })
     .then(() => {
       addRecipeToast()
+      setRecipe('')
+      setCourse('')
+      setPreptime('')
+      setCookingtime('')
+      setServings('')
     })
     .catch((error) => {
       addRecipeErrorToast()
@@ -76,6 +81,7 @@ const AddRecipeScreen = () => {
           placeholder="Preparation time"
           placeholderTextColor={colors.white}
           onChangeText={(text) => setPreptime(text)}
+          onChange={(value) => setPreptime(value)}
           value={preptime}
         />
         <Input

@@ -19,7 +19,7 @@ export const registerSuccToast = () => {
     })
   }
   
-  export const passErrorToast = () => {
+  export const userErrorToast = () => {
     Toast.show({
       type: "error",
       position: "bottom",
@@ -28,12 +28,21 @@ export const registerSuccToast = () => {
     })
   }
 
-  export const userErrorToast = () => {
+  export const passErrorToast = () => {
     Toast.show({
       type: "error",
       position: "bottom",
       text1: "Passwords not matching",
       text2: "Try checking your passwords",
+    })
+  }
+
+  export const signOutToast = () => {
+    Toast.show({
+      type: "success",
+      position: "bottom",
+      text1: "Sign out succesful",
+      text2: "Directing you to login screen now",
     })
   }
 

@@ -1,48 +1,21 @@
-import { bindActionCreators } from "@reduxjs/toolkit"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Text, TextInput, TouchableOpacity, View } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import { firebase } from "../../../firebase/config"
-import { connect } from "react-redux"
-// actions
-import * as authenticationAction from "../../../actions/AuthActions"
-// import toasts
-import {
-  loginSuccToast,
-  passErrorToast,
-  userErrorToast,
-} from "../../../components/toasts/index"
+import { AuthContext } from "../../../navigation/authProvider"
 import styles from "./styles"
+import { colors } from "react-native-elements"
 
 const LoginScreen = (props) => {
   const navigation = useNavigation()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const { login } = useContext(AuthContext)
 
   const onRegisterPress = () => {
     navigation.navigate("Register")
   }
 
-  const onLoginPress = () => {
-    if (!password) {
-      passErrorToast()
-      return
-    }
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(() => {
-        loginSuccToast()
-      })
-      .then(() => navigation.navigate("Main"))
-      .then(() => {
-        props.authenticationActions.authenticationAction(true)
-      })
-      .catch((error) => {
-        userErrorToast()
-      })
-  }
   const {
     container,
     input,
@@ -60,7 +33,7 @@ const LoginScreen = (props) => {
         <TextInput
           style={styles.input}
           placeholder="E-mail"
-          placeholderTextColor="#aaaaaa"
+          placeholderTextColor={colors.black}
           onChangeText={(text) => setEmail(text)}
           value={email}
           underlineColorAndroid="transparent"
@@ -68,7 +41,7 @@ const LoginScreen = (props) => {
         />
         <TextInput
           style={input}
-          placeholderTextColor="#aaaaaa"
+          placeholderTextColor={colors.black}
           secureTextEntry
           placeholder="Password"
           onChangeText={(text) => setPassword(text)}
@@ -76,7 +49,7 @@ const LoginScreen = (props) => {
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         />
-        <TouchableOpacity style={button} onPress={() => onLoginPress()}>
+        <TouchableOpacity style={button} onPress={() => login(email, password)}>
           <Text style={buttonTitle}>Log in</Text>
         </TouchableOpacity>
         <View style={footerView}>
@@ -92,11 +65,4 @@ const LoginScreen = (props) => {
   )
 }
 
-const mapStateToProps = (state) => ({
-  signedIn: state.authReducer.signedIn,
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  authenticationActions: bindActionCreators(authenticationAction, dispatch),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)
+export default LoginScreen
