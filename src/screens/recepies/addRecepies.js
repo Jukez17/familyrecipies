@@ -17,7 +17,8 @@ const AddRecipeScreen = () => {
   const [cookingtime, setCookingtime] = useState('')
   const [servings, setServings] = useState('')
   const [ingredients, setIngredients] = useState([])
-
+  const [newIngredient, setNewIngredient] = useState('')
+  console.log('ingredients: ', ingredients)
   const addRecipe = () => {
     const uid = firebase.auth().currentUser.uid
     firebase
@@ -26,8 +27,8 @@ const AddRecipeScreen = () => {
     .push({
       recipe: recipe,
       course: course,
-      preptime: preptime,
-      cookingtime: cookingtime,
+      preptime: parseFloat(preptime),
+      cookingtime: parseFloat(cookingtime),
       servings: servings
     })
     .then(() => {
@@ -41,7 +42,24 @@ const AddRecipeScreen = () => {
     .catch((error) => {
       addRecipeErrorToast()
     })
-  } 
+  }
+
+  const addIngredient = () => {
+    if (newIngredient.length >= 0) {
+      setIngredients([
+        ...ingredients,
+        {
+          id: ingredients.length + 1,
+          ingredient: newIngredient
+        }
+      ])
+      setNewIngredient('')
+    }
+  }
+
+  const removeIngredient = (ingredient) => {
+    setIngredients(ingredients.filter((item) => item.ingredient !== ingredient))
+  }
 
   const {
     container,
@@ -106,11 +124,10 @@ const AddRecipeScreen = () => {
           inputStyle={inputStyle}
           placeholder="Ingredient"
           placeholderTextColor={colors.white}
-          onChangeText={(text) => setIngredients(text)}
+          onChange={(value) => setNewIngredient(value)}
+          value={newIngredient}
         />
-        <Pressable onPress={() => {}}>
-          <Ionicons style={addIcon} name="ios-add-circle-outline" size={50} />
-        </Pressable>
+            <Ionicons onPress={() => addIngredient()} style={addIcon} name="ios-add-circle-outline" size={50} />
       </View>
       <Pressable style={addButton} onPress={() => addRecipe()}>
         <View style={buttonContainer}>
