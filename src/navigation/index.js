@@ -6,7 +6,8 @@ if (!global.btoa) {
 if (!global.atob) {
   global.atob = decode
 }
-import { firebase } from "../firebase/config"
+import { getAuth, onAuthStateChanged } from "firebase/auth"
+import firebaseApp from "../firebase/config"
 import { AuthContext } from "./authProvider"
 // screens
 import AuthStack from "./authStack"
@@ -18,17 +19,26 @@ import colors from "../styles/colors"
 
 const Navigation = (props) => {
   const { user, setUser } = useContext(AuthContext)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [initializing, setInitializing] = useState(true)
+  const auth = getAuth(firebaseApp)
+  const onAuthStateChanged = (auth, (user) => {
+    if (user) {
+      const uid = user.uid
+      setUser(user)
+    } else {
 
-  const onAuthStateChanged = (user) => {
-    setUser(user)
+    }
+    console.log('user: ', user)
     if (initializing) setInitializing(false)
     setLoading(false)
-  }
+    // setUser(user)
+    // if (initializing) setInitializing(false)
+    // setLoading(false)
+  })
   
   useEffect(() => {
-    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged)
+    const subscriber = onAuthStateChanged(onAuthStateChanged)
     return subscriber
   }, [])
 

@@ -25,14 +25,12 @@ const RegisterScreen = ({ navigation }) => {
   const onLoginPress = () => {
     navigation.navigate("Login")
   }
-  const onRegisterPress = () => {
     if (password !== confirmPassword) {
       passErrorToast()
       return
     }
 
     register(email, password)
-  }
   const {
     container,
     input,
